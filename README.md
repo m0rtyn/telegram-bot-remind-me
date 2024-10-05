@@ -1,8 +1,8 @@
-# Marathons bot
+# Haskellthon bot
 
 ## Development
 
-!!! NOTE: scripts in package.json is wrong, you need to remove fucking `pm2` and add ~~fucking~~ `Docker`
+!!! NOTE: scripts in package.json is wrong, you have to remove fucking `pm2` and add ~~fucking~~ `Docker`
 
 1. `./ngrok http https://localhost`
 2. Copy "Forwarding address"
@@ -15,8 +15,13 @@
 
 ### Authorizing
 
-// TODO: add instructions to get personal Google Service Account
-// TODO: add instructions to get personal Telegram bot token*
+1. Вошёл в Google Cloud Platfor > Console > APIs & Services (select project)
+2. Enable Google Sheets API
+3. Go to Credentials > Create account > Service Account (Owner)
+   1. Keys > Add Key (JSON) > Download key
+   2. Set params from json to .env
+4. Give a permission to edit the sheet by bot's service account
+// TODO: add instructions to get personal Telegram bot token
 
 ### Spreadsheet
 

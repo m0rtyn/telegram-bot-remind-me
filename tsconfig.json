@@ -16,7 +16,7 @@
     "alwaysStrict": true, 
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "esModuleInterop": true
   },
   "include": ["src/**/*.ts"],
