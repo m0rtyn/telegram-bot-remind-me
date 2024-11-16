@@ -8,11 +8,6 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon dist/index.js",
     "build": "yarn && tsc",
-    "dev": "pm2 start pm2.dev.json && yarn logs",
-    "prod:start": "pm2-runtime start pm2.prod.json",
-    "restart": "pm2-runtime restart bot",
-    "kill": "pm2 kill",
-    "logs": "pm2 logs --lines=100",
     "test": "jest --config jest.config.js"
   },
   "dependencies": {
@@ -34,7 +29,6 @@
     "@typescript-eslint/parser": "^8.8.0",
     "eslint": "^9.12.0",
     "jest": "^29.7.0",
-    "pm2": "^5.2.0",
     "ts-jest": "^29.1.5",
     "typescript": "^5.5.2"
   },
