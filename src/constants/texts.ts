@@ -33,7 +33,7 @@ export const MESSAGES = {
   FEEDBACK: "Пожалуйста, поделитесь вашим анонимным отзывом о марафоне. Там только один обязательный вопрос. Это поможет мне развиваться.", // "Please, share your anonymous feedback about the marathon. It will help us to improve it.",
   SHEETS_QUOTA_EXCEEDED: "Ого, вы достигли ограничения по запросам к таблице марафона. Повторите действие через пару минут.", // "Sorry, we have reached the limit of requests to Google Sheets. Please, try again later.",
   TABLE: "Ссылка на таблицу", // "Link to the table"
-  HANDBOOK: "Ссылка на методичку", // "Link to the handbook"
+  HANDBOOK: "Ссылка на учебник", // "Link to the handbook"
   BOT_VERSION: "Версия бота:\n", // "Bot version is"
   UPDATE_AVAILABLE: "Нажмите на 👉 /start", // "Please, press 👉 /start"
   OKAY: "👌"

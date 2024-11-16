@@ -17,16 +17,16 @@ export enum SHEETS {
   TEAMS = "Leaderboard",
 }
 
-export const CONTENTS_ADDRESS = `${SHEETS.CONTENTS}!A1:B47`
+export const CONTENTS_ADDRESS = `${SHEETS.CONTENTS}!B1:C90`
 export const CHALLENGES_ADDRESS = `${SHEETS.CONTENTS}!C1:C45`
 
 export const MEMBERS_NAMES_COLUMN = "B"
 export const PROGRESS_COLUMN = "C"
 export const PROGRESS_START_ROW = "4"
 export const CHAPTERS_RANGE_START = "D"
-export const CHAPTERS_RANGE_END = "AN"
+export const CHAPTERS_RANGE_END = "BY"
 export const CHAPTERS_PAGES_ROW = "2"
 export const MEMBER_NAMES_ADDRESS = `${SHEETS.MEMBERS}!${MEMBERS_NAMES_COLUMN}1:${MEMBERS_NAMES_COLUMN}`
 
-export const MAX_CHAPTER_NUMBER = 37
+export const MAX_CHAPTER_NUMBER = 73
 export const CHAPTER_COLUMNS_OFFSET = 3

@@ -78,16 +78,16 @@ export async function getNextChapterNumber(username: string) {
 }
 
 export async function getChapterName(
-  chapterPage: number
+  chapterNumber: number
 ) {
   const sheets = await sheetsPromise
-  const [chapterPages, chapterNames] = await getValuesFromSheet(
+  const [chapterNames, chapterNums] = await getValuesFromSheet(
     sheets,
     CONTENTS_ADDRESS,
     "COLUMNS"
   )
 
-  const chapterRowIndex = chapterPages.indexOf(chapterPage.toString())
+  const chapterRowIndex = chapterNums.indexOf(chapterNumber.toString())
   const chapterName = chapterNames[chapterRowIndex]
 
   return chapterName
@@ -112,6 +112,8 @@ export async function setChapterAsRead(
 
   const chapterColumnLetter = getChapterLetter(chapterNumber)
   
+  if (chapterColumnLetter === "D") setStartDate(userRowNumber)
+  
   const range = `${SHEETS.MEMBERS}!${chapterColumnLetter}${userRowNumber}`
   const requestBody = { values: [[true]] }
   
@@ -132,9 +134,8 @@ export async function setChapterAsRead(
 }
 
 export async function addParticipantToSheet(username: string) {
-  const newRowNumber = await getParticipantNameList().then(
-    (users) => users.length + 1
-  ) // +1 because of header
+  const newRowNumber = await getParticipantNameList()
+    .then((users) => users.length + 2) // +2 because of height of the header
   const range = `${SHEETS.MEMBERS}!${MEMBERS_NAMES_COLUMN}${newRowNumber}`
 
   const userRow = [getUserHyperlinkFormulaText(username)]
@@ -146,8 +147,8 @@ export async function addParticipantToSheet(username: string) {
     const response = await sheets.spreadsheets.values.append({
       valueInputOption: "USER_ENTERED",
       spreadsheetId: SS_ID,
-      range,
       requestBody,
+      range,
     })
 
     return response
@@ -185,10 +186,12 @@ export const getProgress = async (username: string) => {
 export const getBetterThanPercent = async (progress: number) => {
   const usersProgressesRange = `${SHEETS.MEMBERS}!${PROGRESS_COLUMN}${PROGRESS_START_ROW}:${PROGRESS_COLUMN}` // E.g. Board!B4:Z4 full forth row only with user's chapters
   const sheets = await sheetsPromise
-  const usersProgresses = (await getValuesFromSheet(sheets, usersProgressesRange)).flat().map((progress: string) => Number.parseInt(progress))
-  
-  const betterThan = usersProgresses.filter((userProgress) => progress > userProgress).length
-  const betterThanPercent = Math.round((betterThan / (usersProgresses.length - 1)) * 100)
+  const usersProgresses = (await getValuesFromSheet(sheets, usersProgressesRange))
+    .flat()
+    .map((progress: string) => Number.parseInt(progress))
+              
+  const betterThan = usersProgresses.filter((userProgress) => progress > userProgress)
+  const betterThanPercent = Math.round((betterThan.length / (usersProgresses.length - 1)) * 100)
   
   return betterThanPercent
 }
@@ -198,3 +201,25 @@ export const getTeamProgress = async () => 100500
 export const getTeamPlace = async () => 100500
 export const getTeamName = async () => "Team name"
 export const getDaysLeft = async () => 100500
+
+async function setStartDate(userRowNumber: number) {
+  const range = `${SHEETS.MEMBERS}!${START_DATE_COLUMN}${userRowNumber}`
+  const requestBody = { values: [[new Date().toISOString().slice(0,10)]] }
+
+  try {
+    const sheets = await sheetsPromise
+    const response = await sheets.spreadsheets.values.update({
+      valueInputOption: "USER_ENTERED",
+      spreadsheetId: SS_ID,
+      requestBody,
+      range,
+    })
+
+    return response
+  } catch (err) {
+    console.error(err)
+    throw new Error("The API returned an error: " + err)
+  }
+}
+
+const START_DATE_COLUMN = 'CN'

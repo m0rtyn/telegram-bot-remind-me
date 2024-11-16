@@ -24,8 +24,10 @@ export interface BotState {
 export const botState: BotState = {}
 
 try {
-  bot.use(Telegraf.log())
-  bot.telegram.setWebhook(WEBHOOK_URL).then((res) => console.log(res)).catch((err) => console.error(err))
+  bot.use(Telegraf.log((resp) => console.log('update')))
+  bot.telegram.setWebhook(WEBHOOK_URL)
+    .then((res) => console.log(res))
+    .catch((err) => console.error(err))
 } catch (error) {
   console.error(error)
   bot.stop()
@@ -41,7 +43,7 @@ bot.catch((err, ctx) => {
   } else {
     ctx.reply(MESSAGES.ERROR)
     console.error(
-      `⚠️ Ooops, encountered an error for ${ctx.updateType}:\n${err}`
+      `⚠️ Ooops, encountered an error for ${ctx.updateType.toUpperCase()}:\n${err}`
     )
   }
 })
@@ -83,35 +85,28 @@ bot.hears(Answers.TABLE, ctx => ctx.reply(
 ))
 bot.hears(Answers.UPDATE, async (ctx) => {
   const dialogBotVersion = botState[ctx.chat.id]?.currentVersion
-  const isNewVersion = dialogBotVersion && dialogBotVersion === process.env?.npm_package_version
+  const isNewVersion = !!dialogBotVersion && dialogBotVersion === process.env?.npm_package_version
+  
   ctx.reply(`${MESSAGES.BOT_VERSION} ${dialogBotVersion || "unknown"} ${isNewVersion ? "👍" : "👎"}`)
   !isNewVersion && ctx.reply(MESSAGES.UPDATE_AVAILABLE)
 })
 
 // NOTE: inline keyboard answers
-bot.on("callback_query", (ctx) => {
-  switch (ctx.callbackQuery?.data) {
-    case Answers.YES:
-      return onChapterRead(ctx)
-    case Answers.OTHER:
-      return selectOtherChapter(ctx)
-    case Answers.NO:
-      return ctx.reply(MESSAGES.OKAY)
-    case Answers.LOG_ME_IN:
-      return logUserIn(ctx)
-    case Answers.NEVERMORE:
-      return ctx.reply(MESSAGES.OKAY)
-    default:
-      return
-  }
-})
+
+bot.action(Answers.LOG_ME_IN, (ctx) => logUserIn(ctx))
+bot.action(Answers.NEVERMORE, (ctx) => ctx.reply(MESSAGES.OKAY))
+bot.action(Answers.YES, onChapterRead)
+bot.action(Answers.OTHER, selectOtherChapter)
+bot.action(Answers.NO, (ctx) => ctx.reply(MESSAGES.OKAY))
 
 bot.hears(/^[0-9]{1,2}$/, onOtherChapterRead)
 
 bot.hears(/.*/, (ctx) => ctx.reply(MESSAGES.UNKNOWN_TEXT))
 
-bot.launch().then(() => {
-  console.log("Bot is up and running")
-}).catch((err) => console.debug("🚀 ~ err", err))
+bot
+  .launch({allowedUpdates: ['message', 'callback_query']}).then(() => {
+    console.log("🎬 Bot is up and running")
+  })
+  .catch((err) => console.error("🚀 ~ err", err))
 process.once("SIGINT", () => bot.stop())
 process.once("SIGTERM", () => bot.stop())

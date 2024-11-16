@@ -104,7 +104,7 @@ export async function askNextChapter(ctx: Context) {
   const nextChapterPage = await getChapterPage(nextChapterNumber)
   const nextChapterName = await getChapterName(nextChapterPage)
 
-  const replyText = `${MESSAGES.CHAPTER_QUESTION} «${nextChapterName}»?\n(страница: ${nextChapterPage})`
+  const replyText = `${MESSAGES.CHAPTER_QUESTION} *${nextChapterName}*?\n\\(номер: \`${nextChapterPage}\`\\)`
   const buttons = [
     [
       Markup.button.callback(Answers.YES, Answers.YES),
@@ -113,7 +113,7 @@ export async function askNextChapter(ctx: Context) {
     ],
   ]
 
-  return await ctx.reply(replyText, Markup.inlineKeyboard(buttons))
+  return await ctx.replyWithMarkdownV2(replyText, Markup.inlineKeyboard(buttons))
 }
 
 export async function setWebhook() {
@@ -125,8 +125,7 @@ export async function finishMarathon(ctx: Context) {
 }
 
 export async function test(ctx: Context) {
-  // console.log(ctx.message)
-  console.log("🚀 ~ test ~ TEST", ctx)
+  console.info("🚀 ~ test ~ TEST", ctx)
 }
 
 export async function selectOtherChapter(ctx: Context) {
@@ -173,8 +172,8 @@ export const showUserStats = async (ctx: Context) => {
 
   const progress = await getProgress(username)
   const betterThanPercent = await getBetterThanPercent(progress)
-  const compliment = getCompliment()
-
+  
+  // const compliment = getCompliment()
   // TODO: implement team progress and forecast
   // const teamProgress = await getTeamProgress(username)
   // const teamPlace = await getTeamPlace(username)
@@ -182,14 +181,14 @@ export const showUserStats = async (ctx: Context) => {
   // const daysLeft = await getDaysLeft(username)
   
   const replyText = 
-`— Вы прочитали *${progress}%* методички
-— Вы лучше *${betterThanPercent}%* участников
-— А ещё вы ||${compliment}||`
+`— Вы прочитали *${progress}%* учебника
+— Вы лучше *${betterThanPercent}%* участников`
+// — А ещё вы ||${compliment}||`
 // `— You have read *${progress}%* of the Handbook
 // — You better than *${betterThanPercent}%* of participants
 // — And you are so ||${compliment}||\\!`
-  // — Your team progress is **${teamProgress}** / ${teamPlace} place (${teamName})
-  // — You can finish marathon in ${daysLeft} days
+// — Your team progress is **${teamProgress}** / ${teamPlace} place (${teamName})  // TODO:
+// — You can finish marathon in ${daysLeft} days // TODO:
 
 
   return await ctx.replyWithMarkdownV2(replyText)
