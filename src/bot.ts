@@ -18,6 +18,14 @@ import {
 } from "./spreadsheet.js"
 import { getCompliment } from "./utils.js"
 
+export const MAIN_KEYBOARD = Markup.keyboard([
+  // Markup.button.text("Команда"), // TODO: add team command
+  // Markup.button.callback(Answers.HANDBOOK, 'handbook'),
+  Markup.button.callback(Answers.ADD_CHAPTER, "add_chapter"),
+  Markup.button.callback(Answers.STATS, "statistics"),
+  Markup.button.callback(Answers.MISC, 'misc'),
+], { wrap: (_, index) => index === 1 || index % 2 !== 0 }).resize()
+
 const CHAPTERS_PIC_URL =
   "https://i.ibb.co/DKY6FVW/cfar-handbook-chapters.png"
 
@@ -36,20 +44,10 @@ export async function onStart(ctx: Context) {
 
   const isLoggedIn = await checkUser(username)
   if (isLoggedIn) {
-    const keyboard = Markup.keyboard([
-      // Markup.button.callback(Answers.TABLE, 'table'),
-      // Markup.button.text("Команда"), // TODO: add team command
-      Markup.button.callback(Answers.ADD_CHAPTER, "add_chapter"),
-      Markup.button.callback(Answers.STATS, "statistics"),
-      Markup.button.callback(Answers.HANDBOOK, 'handbook'),
-      Markup.button.callback(Answers.FEEDBACK, 'feedback'),
-      Markup.button.callback(Answers.UPDATE, 'update'),
-    ], { wrap: (_, index) => index === 1 || index % 2 !== 0 }).resize()
-    
     await ctx.reply(MESSAGES.ALREADY_LOGGED_IN)
     return await ctx.reply(
       `${MESSAGES.HELLO}, @${username}`,
-      keyboard
+      MAIN_KEYBOARD
     )
   } else {
     return await askToJoin(ctx)

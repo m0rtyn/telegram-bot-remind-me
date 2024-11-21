@@ -3,6 +3,7 @@ import { Answers, BOT_TOKEN, MESSAGES, WEBHOOK_URL } from "./constants/index.js"
 import {
   askNextChapter,
   logUserIn,
+  MAIN_KEYBOARD,
   onChapterRead,
   onOtherChapterRead,
   onStart,
@@ -67,7 +68,7 @@ bot.hears(Answers.HANDBOOK, ctx => ctx.reply(
     [
       Markup.button.url(
         "📖",
-        "https://www.rationality.org/files/CFAR_Handbook_2021-01.pdf"
+        "https://learnyouahaskell.com/chapters"
       ),
     ],
   ])
@@ -91,8 +92,25 @@ bot.hears(Answers.UPDATE, async (ctx) => {
   !isNewVersion && ctx.reply(MESSAGES.UPDATE_AVAILABLE)
 })
 
-// NOTE: inline keyboard answers
+bot.hears(Answers.MISC, async (ctx) => ctx
+  .reply(
+    "Окей",
+    Markup.keyboard([
+      // Markup.button.callback(Answers.TABLE, 'table'),
+      Markup.button.callback(Answers.HANDBOOK, 'handbook'),
+      Markup.button.callback(Answers.FEEDBACK, 'feedback'),
+      Markup.button.callback(Answers.UPDATE, 'update'),
+      Markup.button.callback(Answers.TO_BACK, 'toBack'),
+    ], { wrap: (_, index) => index % 2 === 0 }).resize()
+  )
+  .then((m) => setTimeout(() => ctx.deleteMessage(m.message_id), 70000)))
 
+bot.hears(Answers.TO_BACK, async (ctx) => ctx.reply(
+  "Back",
+  MAIN_KEYBOARD
+))
+
+// NOTE: inline keyboard answers
 bot.action(Answers.LOG_ME_IN, (ctx) => logUserIn(ctx))
 bot.action(Answers.NEVERMORE, (ctx) => ctx.reply(MESSAGES.OKAY))
 bot.action(Answers.YES, onChapterRead)

@@ -1,9 +1,9 @@
-import * as texts from "./texts.js"
+export * from "./texts.js"
 import * as spreadsheet from "./spreadsheet.js"
 import * as bot from "./bot.js"
 import * as dev from "./dev.js"
 
-export const { MESSAGES, Answers } = texts
+// export const { MESSAGES, Answers } = texts
 export const { WEBHOOK_URL } = dev
 export const {
   ADMIN_ID,

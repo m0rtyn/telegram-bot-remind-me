@@ -7,11 +7,13 @@ export enum Answers {
   LOG_ME_IN = "📝 Впиши меня", // "📝 Log me in",
   NEVERMORE = "🙅 Низашто", // "🙅 Nevermore",
   ADD_CHAPTER = "☝ Добавь главу", // "☝ Add chapter",
-  HANDBOOK = "📓 Дай методичку", // "📓 Get handbook",
+  HANDBOOK = "📓 Дай книжку", // "📓 Get handbook",
   STATS = "📈 Статистика", // "📈 Statistics",
   FEEDBACK = "📩 Фидбэк", // "📩 Feedback",
   TABLE = "📊 Дай таблицу", // "📊 To the table",
   UPDATE = "🔄 Обновление", // "🔄 Update",
+  MISC = "🔧 Прочее", // "🔧 Misc",
+  TO_BACK = "🔙 Назад", // "🔙 Back",
 }
 
 export const MESSAGES = {
